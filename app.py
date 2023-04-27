@@ -2,6 +2,7 @@
 from tkinter import *
 from tkinter.ttk import Combobox
 from tkinter import messagebox
+import sqlite3
 
 # set the background color for the GUI
 bg_color = "#326273"
@@ -14,11 +15,21 @@ root.geometry("700x400+300+200")
 root.title("Interstella Registry Form")
 root.resizable(False, False)
 
+# Data Storage
+conn = sqlite3.connect("register.db")
+cur = conn.cursor()
+
+
+
+
 # set the background color of the window
 root.configure(bg=bg_color)
-
+# Define a fuction to Submit the form
+def cmd_submit():
+    
+    ...
 # define a function to clear all the input fields
-def clear():
+def cmd_clear():
     nameValue.set("")
     contactValue.set('')
     ageValue.set("")
@@ -61,8 +72,8 @@ addressEntry = Text(root, width=50, height=4, bd=4)
 addressEntry.place(x=200, y=250)
 
 # create buttons to submit the form, clear the fields, and exit the program
-btn_submit = Button(root, text="Submit", bg=bg_color,fg="white",width=15, height=2)
-btn_clear = Button(root, text="Clear", bg=bg_color,fg="white",width=15, height=2, command=clear)
+btn_submit = Button(root, text="Submit", bg=bg_color,fg="white",width=15, height=2, command=cmd_submit)
+btn_clear = Button(root, text="Clear", bg=bg_color,fg="white",width=15, height=2, command=cmd_clear)
 btn_exit = Button(root, text="Exit", bg=bg_color,fg="white",width=15, height=2, command= lambda: root.destroy())
 
 # position the buttons on the form
