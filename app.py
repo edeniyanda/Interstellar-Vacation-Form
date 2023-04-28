@@ -15,25 +15,44 @@ root.geometry("700x400+300+200")
 root.title("Interstella Registry Form")
 root.resizable(False, False)
 
-# Data Storage
-conn = sqlite3.connect("register.db")
+# Connect to database
+conn = sqlite3.connect("register.sqlite")
+
+# create a curesor object
 cur = conn.cursor()
-
-
 
 
 # set the background color of the window
 root.configure(bg=bg_color)
-# Define a fuction to Submit the form
-def cmd_submit():
-    
-    ...
+
 # define a function to clear all the input fields
 def cmd_clear():
     nameValue.set("")
     contactValue.set('')
     ageValue.set("")
     addressEntry.delete(1.0, END)
+    
+# Define a fuction to Submit the form
+def cmd_submit():
+    name = nameEntry.get()
+    contact = contactEntry.get()
+    age = ageEntry.get()
+    gender = gender_combo.get()
+    address = addressEntry.get(1.0, END)
+    
+    # Insert the user data into the "user" table
+    cur.execute("INSERT INTO users (name, contact, age, gender, address) VALUES (?, ?, ?, ?, ?)", (name, contact, age, gender, address))
+
+    # Commit the changes
+    conn.commit()
+
+    # Close the connection
+    conn.close()
+    
+    # Show a message box
+    messagebox.showinfo("Success", "User data has been stored!")
+    
+    cmd_clear()
 
 # create a label for the heading
 Label(root, text="Please fill the form Below", font="arial 13", bg=bg_color).place(x=20, y=20)
@@ -48,7 +67,7 @@ Label(root, text="Address", bg=bg_color, fg="#fff", font="23").place(x=50, y=250
 # create input fields for each input field
 nameValue  = StringVar()
 contactValue = StringVar()
-ageValue = IntVar()
+ageValue = StringVar()
 
 # create an Entry widget for the name input field
 nameEntry = Entry(root, textvariable=nameValue, width=45, bd=2, font=20 )
@@ -63,9 +82,9 @@ ageEntry = Entry(root, textvariable=ageValue, width=15, bd=2, font=20 )
 ageEntry.place(x=200, y=200)
 
 # create a Combobox widget for the gender input field
-gender = Combobox(root, values=["Male", "Female", "Prefer not to say"], font="arial 14",  state="r", width=14)
-gender.place(x=435, y= 200)
-gender.set("Male")
+gender_combo = Combobox(root, values=["Male", "Female", "Prefer not to say"], font="arial 14",  state="r", width=14)
+gender_combo.place(x=435, y= 200)
+gender_combo.set("Male")
 
 # create a Text widget for the address input field
 addressEntry = Text(root, width=50, height=4, bd=4)
