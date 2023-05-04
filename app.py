@@ -18,23 +18,31 @@ root.resizable(False, False)
 # Connect to database
 conn = sqlite3.connect("register.sqlite")
 
-# create a curesor object
+# create a cursor object
 cur = conn.cursor()
 
-cur.execute('''
-            DROP TABLE IF EXISTS users;
-            ''')
-cur.execute('''
-            CREATE TABLE "users" (
-	                "id"	INTEGER NOT NULL UNIQUE,
-	                "name"	TEXT NOT NULL,
-	                "contact"	TEXT NOT NULL,
-	                "age"	TEXT NOT NULL,
-	                "gender"	TEXT NOT NULL,
-	                "address"	TEXT NOT NULL,
-	                PRIMARY KEY("id" AUTOINCREMENT)
-            );
-            ''')
+# Define the table name
+table_name = 'users'
+
+# Execute the SELECT statement
+cur.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
+
+# Fetch the result
+result = cur.fetchone()
+
+# Check if the result is not None
+if result is None:
+    cur.execute('''
+                CREATE TABLE "users" (
+                        "id"	INTEGER NOT NULL UNIQUE,
+                        "name"	TEXT NOT NULL,
+                        "contact"	TEXT NOT NULL,
+                        "age"	TEXT NOT NULL,
+                        "gender"	TEXT NOT NULL,
+                        "address"	TEXT NOT NULL,
+                        PRIMARY KEY("id" AUTOINCREMENT)
+                );
+                ''')
 
 # set the background color of the window
 root.configure(bg=bg_color)
@@ -56,7 +64,7 @@ def cmd_submit():
     
     for detail in (name, contact, age, gender, address):
         if len(detail) == 0:
-            return messagebox.showerror("Error Message", "Plese Fill the Form Compeletely")
+            return messagebox.showerror("Error Message", "Please Fill the Form Compeletely")
 
     # Insert the user data into the "user" table
     cur.execute("INSERT INTO users (name, contact, age, gender, address) VALUES (?, ?, ?, ?, ?)", (name, contact, age, gender, address))
