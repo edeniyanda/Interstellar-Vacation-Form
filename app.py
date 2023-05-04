@@ -21,6 +21,20 @@ conn = sqlite3.connect("register.sqlite")
 # create a curesor object
 cur = conn.cursor()
 
+cur.execute('''
+            DROP TABLE IF EXISTS users;
+            ''')
+cur.execute('''
+            CREATE TABLE "users" (
+	                "id"	INTEGER NOT NULL UNIQUE,
+	                "name"	TEXT NOT NULL,
+	                "contact"	TEXT NOT NULL,
+	                "age"	TEXT NOT NULL,
+	                "gender"	TEXT NOT NULL,
+	                "address"	TEXT NOT NULL,
+	                PRIMARY KEY("id" AUTOINCREMENT)
+            );
+            ''')
 
 # set the background color of the window
 root.configure(bg=bg_color)
@@ -40,6 +54,10 @@ def cmd_submit():
     gender = gender_combo.get()
     address = addressEntry.get(1.0, END)
     
+    for detail in (name, contact, age, gender, address):
+        if len(detail) == 0:
+            return messagebox.showerror("Error Message", "Plese Fill the Form Compeletely")
+
     # Insert the user data into the "user" table
     cur.execute("INSERT INTO users (name, contact, age, gender, address) VALUES (?, ?, ?, ?, ?)", (name, contact, age, gender, address))
 
@@ -55,7 +73,8 @@ def cmd_submit():
     cmd_clear()
 
 # create a label for the heading
-Label(root, text="Please fill the form Below", font="arial 13", bg=bg_color).place(x=20, y=20)
+Label(text="Interstella", font="arial 18", bg=bg_color, fg="#fff").place(x=330, y=11)
+Label(root, text="Please fill the form Below", font="arial 11", bg=bg_color,fg="#fff").place(x=30, y=40)
 
 # create labels for each input field
 Label(root, text="Name", font="23", bg=bg_color, fg="#fff").place(x=50, y=100)
