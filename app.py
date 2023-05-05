@@ -10,9 +10,10 @@ bg_color = "#326273"
 # create a new Tkinter window object
 root = Tk()
 
-# set the size, position, and title of the window
+# set the size, position, icon and title of the window
 root.geometry("700x400+300+200")
 root.title("Interstella Registry Form")
+root.iconbitmap("stellar-coin.ico")
 root.resizable(False, False)
 
 # Connect to database
